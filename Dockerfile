@@ -1,9 +1,20 @@
-FROM centos
-RUN yum install java -y
-RUN mkdir /opt/tomcat/
-WORKDIR /opt/tomcat
-ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz /opt/tomcat
-RUN tar xvfz apache*.tar.gz
-RUN mv apache-tomcat-9.0.54/* /opt/tomcat 
-EXPOSE 8080
-CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+# Use the official Node.js image from the Docker Hub
+FROM node:14
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
+
+# Install application dependencies
+RUN npm install
+
+# Copy the rest of the application source code to the container
+COPY . .
+
+# Expose the port your application will run on
+EXPOSE 3000
+
+# Define the command to run your application
+CMD ["node", "app.js"]
